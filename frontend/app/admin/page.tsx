@@ -8,8 +8,8 @@ const menuItems = [
     section: "Utama",
     items: [
       { id: "dashboard", label: "Dashboard", badge: "Aktif" },
-      { id: "users", label: "Kelola Pengguna" },
-      { id: "classes", label: "Manajemen Kelas" }
+      { id: "users", label: "Kelola Pengguna", href: "/admin/users" },
+      { id: "classes", label: "Manajemen Kelas", href: "/admin/classes" }
     ]
   },
   {
@@ -24,7 +24,7 @@ const menuItems = [
     section: "Pengaturan",
     items: [
       { id: "content", label: "Konten & Banner" },
-      { id: "settings", label: "Pengaturan Sistem" }
+      { id: "settings", label: "Pengaturan Sistem", href: "/admin/settings" }
     ]
   }
 ];
@@ -157,42 +157,21 @@ export default function AdminPage() {
                   {menu.section}
                 </p>
                 <div className="mt-3 space-y-2 text-sm text-slate-200">
-                  {menu.items.map((item) => {
-                    if (item.id === "users") {
-                      return (
-                        <Link
-                          key={item.id}
-                          className="flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left text-slate-200 transition hover:bg-white/10"
-                          href="/admin/users"
-                        >
-                          <span>{item.label}</span>
-                          {item.badge ? (
-                            <span className="rounded-full bg-blue-500/20 px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-blue-200">
-                              {item.badge}
-                            </span>
-                          ) : null}
-                        </Link>
-                      );
-                    }
-
-                    if (item.id === "classes") {
-                      return (
-                        <Link
-                          key={item.id}
-                          className="flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left text-slate-200 transition hover:bg-white/10"
-                          href="/admin/classes"
-                        >
-                          <span>{item.label}</span>
-                          {item.badge ? (
-                            <span className="rounded-full bg-blue-500/20 px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-blue-200">
-                              {item.badge}
-                            </span>
-                          ) : null}
-                        </Link>
-                      );
-                    }
-
-                    return (
+                  {menu.items.map((item) =>
+                    item.href ? (
+                      <Link
+                        key={item.id}
+                        className="flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left text-slate-200 transition hover:bg-white/10"
+                        href={item.href}
+                      >
+                        <span>{item.label}</span>
+                        {item.badge ? (
+                          <span className="rounded-full bg-blue-500/20 px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-blue-200">
+                            {item.badge}
+                          </span>
+                        ) : null}
+                      </Link>
+                    ) : (
                       <button
                         key={item.id}
                         className={`flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left transition ${
@@ -210,8 +189,8 @@ export default function AdminPage() {
                           </span>
                         ) : null}
                       </button>
-                    );
-                  })}
+                    )
+                  )}
                 </div>
               </div>
             ))}

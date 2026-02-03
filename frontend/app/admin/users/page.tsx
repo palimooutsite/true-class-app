@@ -24,7 +24,7 @@ const menuItems = [
     section: "Pengaturan",
     items: [
       { id: "content", label: "Konten & Banner" },
-      { id: "settings", label: "Pengaturan Sistem" }
+      { id: "settings", label: "Pengaturan Sistem", href: "/admin/settings" }
     ]
   }
 ];
