@@ -1,25 +1,99 @@
+"use client";
+
+import { useMemo, useState } from "react";
+
 const menuItems = [
   {
     section: "Utama",
     items: [
-      { label: "Dashboard", badge: "Aktif" },
-      { label: "Kelola Pengguna" },
-      { label: "Manajemen Kelas" }
+      { id: "dashboard", label: "Dashboard", badge: "Aktif" },
+      { id: "users", label: "Kelola Pengguna" },
+      { id: "classes", label: "Manajemen Kelas" }
     ]
   },
   {
     section: "Operasional",
     items: [
-      { label: "Jadwal Live Session" },
-      { label: "Transaksi & Pembayaran" },
-      { label: "Laporan & Analitik" }
+      { id: "schedule", label: "Jadwal Live Session" },
+      { id: "payments", label: "Transaksi & Pembayaran" },
+      { id: "reports", label: "Laporan & Analitik" }
     ]
   },
   {
     section: "Pengaturan",
-    items: [{ label: "Konten & Banner" }, { label: "Pengaturan Sistem" }]
+    items: [
+      { id: "content", label: "Konten & Banner" },
+      { id: "settings", label: "Pengaturan Sistem" }
+    ]
   }
 ];
+
+const menuContent = {
+  dashboard: {
+    eyebrow: "Dashboard Admin",
+    title: "Selamat datang, Admin Sistem",
+    description:
+      "Pantau performa platform dan pastikan pengalaman belajar berjalan lancar.",
+    primaryAction: "Buat Pengumuman",
+    secondaryAction: "Export Laporan"
+  },
+  users: {
+    eyebrow: "Manajemen Pengguna",
+    title: "Kelola pengguna & mentor",
+    description:
+      "Atur akses, verifikasi mentor, dan pantau aktivitas siswa secara real-time.",
+    primaryAction: "Tambah Pengguna",
+    secondaryAction: "Unduh Daftar"
+  },
+  classes: {
+    eyebrow: "Manajemen Kelas",
+    title: "Perbarui kurikulum kelas",
+    description:
+      "Susun modul baru, revisi materi, dan cek progres tiap kelas aktif.",
+    primaryAction: "Buat Kelas Baru",
+    secondaryAction: "Tinjau Draft"
+  },
+  schedule: {
+    eyebrow: "Operasional",
+    title: "Atur jadwal live session",
+    description:
+      "Sinkronkan jadwal mentor dan pastikan sesi live berjalan sesuai SLA.",
+    primaryAction: "Tambah Jadwal",
+    secondaryAction: "Lihat Kalender"
+  },
+  payments: {
+    eyebrow: "Keuangan",
+    title: "Kelola transaksi & pembayaran",
+    description:
+      "Pantau pembayaran masuk, verifikasi invoice, dan kirim pengingat tagihan.",
+    primaryAction: "Rekonsiliasi",
+    secondaryAction: "Lihat Riwayat"
+  },
+  reports: {
+    eyebrow: "Laporan",
+    title: "Analitik performa platform",
+    description:
+      "Unduh laporan mingguan dan evaluasi tren pertumbuhan siswa.",
+    primaryAction: "Generate Laporan",
+    secondaryAction: "Bagikan Ringkasan"
+  },
+  content: {
+    eyebrow: "Konten",
+    title: "Kelola konten & banner",
+    description:
+      "Perbarui materi promosi, banner beranda, dan informasi event terbaru.",
+    primaryAction: "Unggah Banner",
+    secondaryAction: "Lihat Asset"
+  },
+  settings: {
+    eyebrow: "Pengaturan",
+    title: "Perbarui pengaturan sistem",
+    description:
+      "Atur preferensi keamanan, notifikasi, dan konfigurasi platform.",
+    primaryAction: "Simpan Pengaturan",
+    secondaryAction: "Audit Log"
+  }
+};
 
 const summaryCards = [
   {
@@ -55,6 +129,12 @@ const recentActivities = [
 ];
 
 export default function AdminPage() {
+  const [activeMenu, setActiveMenu] = useState("dashboard");
+  const activeContent = useMemo(
+    () => menuContent[activeMenu as keyof typeof menuContent],
+    [activeMenu]
+  );
+
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="flex min-h-screen w-full gap-0 px-0 py-6">
@@ -78,8 +158,13 @@ export default function AdminPage() {
                 <div className="mt-3 space-y-2 text-sm text-slate-200">
                   {menu.items.map((item) => (
                     <button
-                      key={item.label}
-                      className="flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left transition hover:bg-white/10"
+                      key={item.id}
+                      className={`flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left transition ${
+                        activeMenu === item.id
+                          ? "bg-white/15 text-white shadow-lg shadow-blue-500/20"
+                          : "text-slate-200 hover:bg-white/10"
+                      }`}
+                      onClick={() => setActiveMenu(item.id)}
                       type="button"
                     >
                       <span>{item.label}</span>
@@ -109,22 +194,21 @@ export default function AdminPage() {
           <header className="flex flex-col gap-6 rounded-3xl bg-white px-6 py-8 shadow-lg shadow-slate-200/70 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-600">
-                Dashboard Admin
+                {activeContent.eyebrow}
               </p>
               <h2 className="mt-2 text-2xl font-semibold text-slate-900">
-                Selamat datang, Admin Sistem
+                {activeContent.title}
               </h2>
               <p className="mt-2 text-sm text-slate-500">
-                Pantau performa platform dan pastikan pengalaman belajar berjalan
-                lancar.
+                {activeContent.description}
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
               <button className="rounded-full border border-slate-200 bg-white px-5 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-900">
-                Export Laporan
+                {activeContent.secondaryAction}
               </button>
               <button className="rounded-full bg-blue-600 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition hover:bg-blue-700">
-                Buat Pengumuman
+                {activeContent.primaryAction}
               </button>
             </div>
           </header>
