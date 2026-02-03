@@ -57,8 +57,8 @@ const recentActivities = [
 export default function AdminPage() {
   return (
     <div className="min-h-screen bg-slate-50">
-      <div className="mx-auto flex min-h-screen max-w-7xl gap-6 px-4 py-6 sm:px-8 lg:px-12">
-        <aside className="hidden w-72 flex-col gap-8 rounded-3xl bg-slate-900 px-6 py-8 text-white shadow-2xl shadow-slate-300/50 lg:flex">
+      <div className="flex min-h-screen w-full gap-0 px-0 py-6">
+        <aside className="hidden w-72 flex-col gap-8 bg-slate-900 px-6 py-8 text-white lg:flex">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-200">
               Admin Panel
