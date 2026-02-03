@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function LoginPage() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 px-6 py-12 sm:px-10 lg:px-20">
@@ -46,9 +48,12 @@ export default function LoginPage() {
                 Lupa kata sandi?
               </button>
             </div>
-            <button className="w-full rounded-full bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition hover:bg-blue-700">
+            <Link
+              className="block w-full rounded-full bg-blue-600 px-6 py-3 text-center text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition hover:bg-blue-700"
+              href="/admin"
+            >
               Masuk
-            </button>
+            </Link>
           </form>
 
           <div className="mt-8 flex items-center gap-4 text-xs text-slate-400">
