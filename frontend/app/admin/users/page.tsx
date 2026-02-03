@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useMemo, useState, type ChangeEvent, type FormEvent } from "react";
 
 const menuItems = [
   {
@@ -32,7 +35,7 @@ const userStats = [
   { label: "Siswa Premium", value: "312" }
 ];
 
-const userRows = [
+const initialUsers = [
   {
     name: "Rania Putri",
     role: "Mentor UI/UX",
@@ -59,7 +62,62 @@ const userRows = [
   }
 ];
 
+const statusStyles: Record<string, string> = {
+  Aktif: "bg-emerald-100 text-emerald-700",
+  Terverifikasi: "bg-blue-100 text-blue-700",
+  "Menunggu Review": "bg-amber-100 text-amber-700"
+};
+
 export default function AdminUsersPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [users, setUsers] = useState(initialUsers);
+  const [formState, setFormState] = useState({
+    name: "",
+    role: "",
+    status: "Aktif"
+  });
+
+  const nextStats = useMemo(() => {
+    return userStats.map((stat) => {
+      if (stat.label === "Total Pengguna") {
+        return {
+          ...stat,
+          value: (1248 + users.length - initialUsers.length).toLocaleString(
+            "id-ID"
+          )
+        };
+      }
+      return stat;
+    });
+  }, [users.length]);
+
+  const handleFormChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = event.target;
+    setFormState((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!formState.name.trim() || !formState.role.trim()) {
+      return;
+    }
+
+    setUsers((prev) => [
+      {
+        name: formState.name.trim(),
+        role: formState.role.trim(),
+        status: formState.status,
+        updated: "Baru saja"
+      },
+      ...prev
+    ]);
+
+    setFormState({ name: "", role: "", status: "Aktif" });
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="min-h-screen bg-slate-50">
       <div className="flex min-h-screen w-full gap-0 px-0 py-6">
@@ -140,14 +198,18 @@ export default function AdminUsersPage() {
               <button className="rounded-full border border-slate-200 bg-white px-5 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-900">
                 Unduh Data
               </button>
-              <button className="rounded-full bg-blue-600 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition hover:bg-blue-700">
+              <button
+                className="rounded-full bg-blue-600 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition hover:bg-blue-700"
+                onClick={() => setIsModalOpen(true)}
+                type="button"
+              >
                 Tambah Pengguna
               </button>
             </div>
           </header>
 
           <section className="grid gap-6 lg:grid-cols-3">
-            {userStats.map((stat) => (
+            {nextStats.map((stat) => (
               <div
                 key={stat.label}
                 className="rounded-3xl bg-white p-6 shadow-lg shadow-slate-200/60"
@@ -183,7 +245,7 @@ export default function AdminUsersPage() {
             </div>
 
             <div className="mt-6 space-y-4">
-              {userRows.map((user) => (
+              {users.map((user) => (
                 <div
                   key={user.name}
                   className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-100 bg-slate-50 px-4 py-4 sm:flex-row sm:items-center"
@@ -195,7 +257,12 @@ export default function AdminUsersPage() {
                     <p className="mt-1 text-sm text-slate-500">{user.role}</p>
                   </div>
                   <div className="flex flex-wrap items-center gap-3 text-sm">
-                    <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">
+                    <span
+                      className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                        statusStyles[user.status] ??
+                        "bg-slate-200 text-slate-700"
+                      }`}
+                    >
                       {user.status}
                     </span>
                     <span className="text-xs text-slate-400">
@@ -211,6 +278,93 @@ export default function AdminUsersPage() {
           </section>
         </main>
       </div>
+      {isModalOpen ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 px-4 py-6">
+          <div className="w-full max-w-xl rounded-3xl bg-white p-6 shadow-2xl">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.3em] text-blue-600">
+                  Tambah Pengguna
+                </p>
+                <h3 className="mt-2 text-xl font-semibold text-slate-900">
+                  Input data pengguna baru
+                </h3>
+                <p className="mt-1 text-sm text-slate-500">
+                  Lengkapi informasi dasar untuk menambah pengguna baru.
+                </p>
+              </div>
+              <button
+                className="rounded-full border border-slate-200 px-3 py-1 text-xs font-semibold text-slate-500"
+                onClick={() => setIsModalOpen(false)}
+                type="button"
+              >
+                Tutup
+              </button>
+            </div>
+
+            <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
+              <div>
+                <label className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                  Nama Lengkap
+                </label>
+                <input
+                  className="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                  name="name"
+                  onChange={handleFormChange}
+                  placeholder="Masukkan nama pengguna"
+                  required
+                  type="text"
+                  value={formState.name}
+                />
+              </div>
+              <div>
+                <label className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                  Peran
+                </label>
+                <input
+                  className="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                  name="role"
+                  onChange={handleFormChange}
+                  placeholder="Contoh: Mentor UI/UX"
+                  required
+                  type="text"
+                  value={formState.role}
+                />
+              </div>
+              <div>
+                <label className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
+                  Status
+                </label>
+                <select
+                  className="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm text-slate-700 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+                  name="status"
+                  onChange={handleFormChange}
+                  value={formState.status}
+                >
+                  <option value="Aktif">Aktif</option>
+                  <option value="Terverifikasi">Terverifikasi</option>
+                  <option value="Menunggu Review">Menunggu Review</option>
+                </select>
+              </div>
+              <div className="flex flex-wrap justify-end gap-3 pt-2">
+                <button
+                  className="rounded-full border border-slate-200 px-5 py-2 text-sm font-semibold text-slate-600"
+                  onClick={() => setIsModalOpen(false)}
+                  type="button"
+                >
+                  Batalkan
+                </button>
+                <button
+                  className="rounded-full bg-blue-600 px-5 py-2 text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition hover:bg-blue-700"
+                  type="submit"
+                >
+                  Simpan Pengguna
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
