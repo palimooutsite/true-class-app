@@ -186,12 +186,12 @@ export default function AdminClassesPage() {
                 >
                   Konten & Banner
                 </button>
-                <button
+                <Link
                   className="flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left transition hover:bg-white/10"
-                  type="button"
+                  href="/admin/settings"
                 >
                   Pengaturan Sistem
-                </button>
+                </Link>
               </div>
             </div>
           </nav>
