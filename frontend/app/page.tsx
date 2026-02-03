@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const features = [
   {
     title: "Kelas Interaktif",
@@ -56,9 +58,12 @@ export default function HomePage() {
             <a className="hover:text-slate-900" href="#harga">
               Harga
             </a>
-            <button className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-900">
+            <Link
+              className="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:text-slate-900"
+              href="/login"
+            >
               Masuk
-            </button>
+            </Link>
           </div>
         </nav>
 
@@ -75,9 +80,12 @@ export default function HomePage() {
               mentor yang responsif, dan komunitas yang saling mendukung.
             </p>
             <div className="mt-6 flex flex-wrap gap-4">
-              <button className="rounded-full bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition hover:bg-blue-700">
+              <Link
+                className="rounded-full bg-blue-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition hover:bg-blue-700"
+                href="/login"
+              >
                 Mulai Belajar
-              </button>
+              </Link>
               <button className="rounded-full border border-blue-200 bg-white px-6 py-3 text-sm font-semibold text-blue-600 transition hover:border-blue-300 hover:text-blue-700">
                 Lihat Kurikulum
               </button>
