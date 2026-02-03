@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 
 const menuItems = [
@@ -156,25 +157,40 @@ export default function AdminPage() {
                   {menu.section}
                 </p>
                 <div className="mt-3 space-y-2 text-sm text-slate-200">
-                  {menu.items.map((item) => (
-                    <button
-                      key={item.id}
-                      className={`flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left transition ${
-                        activeMenu === item.id
-                          ? "bg-white/15 text-white shadow-lg shadow-blue-500/20"
-                          : "text-slate-200 hover:bg-white/10"
-                      }`}
-                      onClick={() => setActiveMenu(item.id)}
-                      type="button"
-                    >
-                      <span>{item.label}</span>
-                      {item.badge ? (
-                        <span className="rounded-full bg-blue-500/20 px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-blue-200">
-                          {item.badge}
-                        </span>
-                      ) : null}
-                    </button>
-                  ))}
+                  {menu.items.map((item) =>
+                    item.id === "users" ? (
+                      <Link
+                        key={item.id}
+                        className="flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left text-slate-200 transition hover:bg-white/10"
+                        href="/admin/users"
+                      >
+                        <span>{item.label}</span>
+                        {item.badge ? (
+                          <span className="rounded-full bg-blue-500/20 px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-blue-200">
+                            {item.badge}
+                          </span>
+                        ) : null}
+                      </Link>
+                    ) : (
+                      <button
+                        key={item.id}
+                        className={`flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left transition ${
+                          activeMenu === item.id
+                            ? "bg-white/15 text-white shadow-lg shadow-blue-500/20"
+                            : "text-slate-200 hover:bg-white/10"
+                        }`}
+                        onClick={() => setActiveMenu(item.id)}
+                        type="button"
+                      >
+                        <span>{item.label}</span>
+                        {item.badge ? (
+                          <span className="rounded-full bg-blue-500/20 px-3 py-1 text-[10px] font-semibold uppercase tracking-wide text-blue-200">
+                            {item.badge}
+                          </span>
+                        ) : null}
+                      </button>
+                    )
+                  )}
                 </div>
               </div>
             ))}
