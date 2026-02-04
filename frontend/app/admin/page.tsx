@@ -16,7 +16,11 @@ const menuItems = [
     section: "Operasional",
     items: [
       { id: "schedule", label: "Jadwal Live Session" },
-      { id: "payments", label: "Transaksi & Pembayaran" },
+      {
+        id: "payments",
+        label: "Transaksi & Pembayaran",
+        href: "/admin/payments"
+      },
       { id: "reports", label: "Laporan & Analitik" }
     ]
   },
